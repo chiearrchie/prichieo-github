@@ -1,0 +1,14 @@
+.dart_tool/
+build/
+.idea/
+*.iml
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+android/local.properties
+android/key.properties
+android/.gradle/
+**/*.jks
+**/*.keystore
+**/keystore-password.txt
+.DS_Store
