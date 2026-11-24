@@ -1,5 +1,13 @@
 # Catatan rilis
 
+## v1.2.0
+
+- Pilihan tema di tab About: **Default** mempertahankan merah putih seperti semula, **GTA6** memakai gradien ungu, magenta, merah, oranye, dan kuning.
+- Preferensi tema tersimpan di perangkat dan tetap mengikuti mode terang atau gelap sistem.
+- Kalimat pembuka pada tab HPP dihapus supaya kolom input lebih ringkas.
+- Teks di atas gradien memakai lapisan kontras bertahap supaya tetap terbaca.
+- Versi: `1.2.0`, version code `4`.
+
 ## v1.1.1
 
 - Tombol **KOSONGKAN INPUT** dipindah dari tab About ke bawah kolom input tab HPP.

@@ -22,6 +22,204 @@ const String _inTarget = 'target.omset';
 const String _inTargetHarga = 'target.harga';
 const int _maxHistory = 50;
 const String _instagramUrl = 'https://www.instagram.com/chiearrchie';
+const String _temaKey = 'prichieo.theme.v1';
+const String _temaDefault = 'Default';
+const String _temaGta6 = 'GTA6';
+
+const Color _warnaUnguTua = Color(0xFF1E0338);
+const Color _warnaUngu = Color(0xFF6A0572);
+const Color _warnaMagenta = Color(0xFFE1007A);
+const Color _warnaMerahMuda = Color(0xFFF74C52);
+const Color _warnaOranye = Color(0xFFFF8C1A);
+const Color _warnaKuning = Color(0xFFFFB800);
+
+const List<Color> _warnaGradasi = <Color>[
+  _warnaUnguTua,
+  _warnaUngu,
+  _warnaMagenta,
+  _warnaMerahMuda,
+  _warnaOranye,
+  _warnaKuning,
+];
+const List<double> _posisiGradasi = <double>[0, 0.25, 0.45, 0.68, 0.85, 1];
+const LinearGradient _gradasiPrichieo = LinearGradient(
+  begin: Alignment(-0.866, -0.5),
+  end: Alignment(0.866, 0.5),
+  colors: _warnaGradasi,
+  stops: _posisiGradasi,
+);
+
+const LinearGradient _lapisanKontras = LinearGradient(
+  begin: Alignment(-0.866, -0.5),
+  end: Alignment(0.866, 0.5),
+  colors: <Color>[
+    Color(0x00000000),
+    Color(0x00000000),
+    Color(0x0D000000),
+    Color(0x4D000000),
+    Color(0x61000000),
+    Color(0x66000000),
+  ],
+  stops: _posisiGradasi,
+);
+
+class _GayaTema extends ThemeExtension<_GayaTema> {
+  const _GayaTema({
+    required this.gradasi,
+    required this.aksen,
+    required this.latarLogo,
+  });
+
+  final LinearGradient? gradasi;
+  final Color aksen;
+  final Color latarLogo;
+
+  @override
+  _GayaTema copyWith({
+    LinearGradient? gradasi,
+    Color? aksen,
+    Color? latarLogo,
+  }) {
+    return _GayaTema(
+      gradasi: gradasi ?? this.gradasi,
+      aksen: aksen ?? this.aksen,
+      latarLogo: latarLogo ?? this.latarLogo,
+    );
+  }
+
+  @override
+  _GayaTema lerp(ThemeExtension<_GayaTema>? other, double t) => this;
+}
+
+const _GayaTema _gayaDefault = _GayaTema(
+  gradasi: null,
+  aksen: Colors.redAccent,
+  latarLogo: Colors.redAccent,
+);
+
+const _GayaTema _gayaGta6 = _GayaTema(
+  gradasi: _gradasiPrichieo,
+  aksen: _warnaUngu,
+  latarLogo: _warnaUnguTua,
+);
+
+_GayaTema _gaya(BuildContext context) =>
+    Theme.of(context).extension<_GayaTema>() ?? _gayaDefault;
+
+Color _aksen(BuildContext context, Color warnaDefault) {
+  final gaya = _gaya(context);
+  return gaya.gradasi == null ? warnaDefault : gaya.aksen;
+}
+
+Widget _lapisanGelap({required Widget child}) {
+  return DecoratedBox(
+    decoration: const BoxDecoration(gradient: _gradasiPrichieo),
+    child: DecoratedBox(
+      decoration: const BoxDecoration(gradient: _lapisanKontras),
+      child: child,
+    ),
+  );
+}
+
+Widget _tombolUtama(
+  BuildContext context, {
+  required String label,
+  required VoidCallback onPressed,
+  required Color warnaDefault,
+}) {
+  final gaya = _gaya(context);
+  if (gaya.gradasi == null) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: warnaDefault,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
+      onPressed: onPressed,
+      child: Text(
+        label,
+        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+  return DecoratedBox(
+    decoration: BoxDecoration(
+      gradient: _gradasiPrichieo,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: _lapisanKontras,
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          disabledBackgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          label,
+          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+    ),
+  );
+}
+
+ThemeData _temaTerangDefault() => ThemeData(
+      brightness: Brightness.light,
+      primarySwatch: Colors.red,
+      scaffoldBackgroundColor: Colors.grey[100],
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.redAccent,
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
+      extensions: const <ThemeExtension<dynamic>>[_gayaDefault],
+    );
+
+ThemeData _temaGelapDefault() => ThemeData(
+      brightness: Brightness.dark,
+      primarySwatch: Colors.red,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.redAccent,
+        foregroundColor: Colors.white,
+      ),
+      extensions: const <ThemeExtension<dynamic>>[_gayaDefault],
+    );
+
+ThemeData _temaTerangGta6() => ThemeData(
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: Colors.grey[100],
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: _warnaUngu,
+        brightness: Brightness.light,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+      ),
+      extensions: const <ThemeExtension<dynamic>>[_gayaGta6],
+    );
+
+ThemeData _temaGelapGta6() => ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: _warnaUngu,
+        brightness: Brightness.dark,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+      ),
+      extensions: const <ThemeExtension<dynamic>>[_gayaGta6],
+    );
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,32 +227,36 @@ Future<void> main() async {
   runApp(const PrichieoApp());
 }
 
-class PrichieoApp extends StatelessWidget {
+class PrichieoApp extends StatefulWidget {
   const PrichieoApp({super.key});
 
   @override
+  State<PrichieoApp> createState() => _PrichieoAppState();
+}
+
+class _PrichieoAppState extends State<PrichieoApp> {
+  @override
+  void initState() {
+    super.initState();
+    AppData.instance.tema.addListener(_temaBerubah);
+  }
+
+  @override
+  void dispose() {
+    AppData.instance.tema.removeListener(_temaBerubah);
+    super.dispose();
+  }
+
+  void _temaBerubah() => setState(() {});
+
+  @override
   Widget build(BuildContext context) {
+    final gta6 = AppData.instance.tema.value == _temaGta6;
     return MaterialApp(
       title: 'PRICHIEO - Smart Tools for Small Business',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.red,
-        scaffoldBackgroundColor: Colors.grey[100],
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.redAccent,
-          foregroundColor: Colors.white,
-          elevation: 0,
-        ),
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.red,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.redAccent,
-          foregroundColor: Colors.white,
-        ),
-      ),
+      theme: gta6 ? _temaTerangGta6() : _temaTerangDefault(),
+      darkTheme: gta6 ? _temaGelapGta6() : _temaGelapDefault(),
       themeMode: ThemeMode.system,
       home: const MainDashboard(),
     );
@@ -70,6 +272,7 @@ class AppData {
   Map<String, String> _inputs = <String, String>{};
   final ValueNotifier<String> unit = ValueNotifier<String>('unit');
   final ValueNotifier<String> modalPercent = ValueNotifier<String>('60');
+  final ValueNotifier<String> tema = ValueNotifier<String>(_temaDefault);
   final ValueNotifier<List<HistoryEntry>> history =
       ValueNotifier<List<HistoryEntry>>(<HistoryEntry>[]);
   final ValueNotifier<String?> error = ValueNotifier<String?>(null);
@@ -79,6 +282,7 @@ class AppData {
       _prefs = await SharedPreferences.getInstance();
       unit.value = _prefs!.getString(_unitKey) ?? 'unit';
       modalPercent.value = _prefs!.getString(_percentKey) ?? '60';
+      tema.value = _prefs!.getString(_temaKey) ?? _temaDefault;
       final rawInputs = _prefs!.getString(_inputsKey);
       if (rawInputs != null && rawInputs.isNotEmpty) {
         final decoded = jsonDecode(rawInputs) as Map<String, dynamic>;
@@ -108,6 +312,13 @@ class AppData {
     if (modalPercent.value == cleaned) return true;
     modalPercent.value = cleaned;
     return _write(() => _prefs!.setString(_percentKey, cleaned));
+  }
+
+  Future<bool> setTema(String value) async {
+    final cleaned = value == _temaGta6 ? _temaGta6 : _temaDefault;
+    if (tema.value == cleaned) return true;
+    tema.value = cleaned;
+    return _write(() => _prefs!.setString(_temaKey, cleaned));
   }
 
   String getInput(String key) => _inputs[key] ?? '';
@@ -264,7 +475,7 @@ class _MainDashboardState extends State<MainDashboard> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.redAccent,
+        selectedItemColor: _aksen(context, Colors.redAccent),
         unselectedItemColor: Colors.grey[600],
         selectedFontSize: 10,
         unselectedFontSize: 10,
@@ -308,11 +519,15 @@ class PrichieoScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gaya = _gaya(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 72,
         titleSpacing: 0,
+        backgroundColor: gaya.gradasi == null ? null : Colors.transparent,
+        surfaceTintColor: gaya.gradasi == null ? null : Colors.transparent,
+        flexibleSpace: gaya.gradasi == null ? null : _lapisanGelap(child: const SizedBox.expand()),
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
@@ -590,11 +805,6 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const Text(
-              'Jangan menipu diri sendiri. Masukkan SEMUA biaya, sekecil apapun.',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent),
-            ),
-            const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: TextField(
@@ -632,16 +842,11 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
               label: const Text('KOSONGKAN INPUT'),
             ),
             const SizedBox(height: 12),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
+            _tombolUtama(
+              context,
+              label: 'HITUNG HPP',
               onPressed: _simpan,
-              child: const Text(
-                'HITUNG HPP',
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              warnaDefault: Colors.redAccent,
             ),
             const SizedBox(height: 24),
             Container(
@@ -649,7 +854,9 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
               decoration: BoxDecoration(
                 color: Colors.grey.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.redAccent.withValues(alpha: 0.5)),
+                border: Border.all(
+                  color: _aksen(context, Colors.redAccent).withValues(alpha: 0.5),
+                ),
               ),
               child: Column(
                 children: <Widget>[
@@ -660,16 +867,20 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
                   const SizedBox(height: 8),
                   Text(
                     rupiah(_hpp),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Colors.redAccent,
+                      color: _aksen(context, Colors.redAccent),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'JANGAN PERNAH JUAL DI BAWAH HARGA INI!',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.redAccent),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: _aksen(context, Colors.redAccent),
+                    ),
                   ),
                 ],
               ),
@@ -766,7 +977,13 @@ class _CashSplitterScreenState extends State<CashSplitterScreen> {
     beriTahu(context, saved ? 'Pemisahan kas tersimpan di riwayat.' : 'Riwayat gagal disimpan.');
   }
 
-  Widget _resultCard(String title, double amount, Color color, String subtitle) {
+  Widget _resultCard(
+    BuildContext context,
+    String title,
+    double amount,
+    Color color,
+    String subtitle,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -784,7 +1001,11 @@ class _CashSplitterScreenState extends State<CashSplitterScreen> {
           const SizedBox(height: 12),
           Text(
             rupiah(amount),
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: _aksen(context, color),
+            ),
           ),
           const SizedBox(height: 8),
           Text(
@@ -829,22 +1050,18 @@ class _CashSplitterScreenState extends State<CashSplitterScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black87,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
+            _tombolUtama(
+              context,
+              label: 'PISAHKAN UANG',
               onPressed: _hitung,
-              child: const Text(
-                'PISAHKAN UANG',
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              warnaDefault: Colors.black87,
             ),
             const SizedBox(height: 24),
             Row(
               children: <Widget>[
                 Expanded(
                   child: _resultCard(
+                    context,
                     'UANG MODAL\n(Rekening Bisnis)',
                     _modal,
                     Colors.orange,
@@ -854,6 +1071,7 @@ class _CashSplitterScreenState extends State<CashSplitterScreen> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: _resultCard(
+                    context,
                     'LABA KOTOR\n(Rekening Laba)',
                     _laba,
                     Colors.green,
@@ -971,16 +1189,11 @@ class _TargetOmsetScreenState extends State<TargetOmsetScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
+            _tombolUtama(
+              context,
+              label: 'HITUNG TARGET',
               onPressed: _hitung,
-              child: const Text(
-                'HITUNG TARGET',
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              warnaDefault: Colors.blueAccent,
             ),
             if (_lastCount != null) ...<Widget>[
               const SizedBox(height: 24),
@@ -989,7 +1202,7 @@ class _TargetOmsetScreenState extends State<TargetOmsetScreen> {
                 decoration: BoxDecoration(
                   color: Colors.blue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.blueAccent),
+                  border: Border.all(color: _aksen(context, Colors.blueAccent)),
                 ),
                 child: Column(
                   children: <Widget>[
@@ -997,16 +1210,20 @@ class _TargetOmsetScreenState extends State<TargetOmsetScreen> {
                     const SizedBox(height: 8),
                     Text(
                       '$_lastCount ${AppData.instance.unit.value}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent,
+                        color: _aksen(context, Colors.blueAccent),
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Fokus jualan sampai angka ini tercapai!',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: _aksen(context, Colors.blueAccent),
+                      ),
                     ),
                   ],
                 ),
@@ -1171,8 +1388,17 @@ class AboutScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _pilihTema(BuildContext context, String? nama) async {
+    if (nama == null) return;
+    final berhasil = await AppData.instance.setTema(nama);
+    if (!berhasil && context.mounted) {
+      beriTahu(context, 'Tema gagal disimpan.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final gaya = _gaya(context);
     return PrichieoScaffold(
       title: 'About',
       body: SingleChildScrollView(
@@ -1189,7 +1415,7 @@ class AboutScreen extends StatelessWidget {
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: Colors.redAccent,
+                        color: gaya.latarLogo,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
@@ -1226,6 +1452,51 @@ class AboutScreen extends StatelessWidget {
                     _AboutRow(label: 'Short description', value: 'Smart Tools for Small Business'),
                     _AboutRow(label: 'Tagline', value: 'Manage Better, Grow Smarter.'),
                     _AboutRow(label: 'Developer', value: 'Created by Chiearrchie'),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Tema',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    ValueListenableBuilder<String>(
+                      valueListenable: AppData.instance.tema,
+                      builder: (BuildContext context, String temaSaatIni, Widget? child) {
+                        return RadioGroup<String>(
+                          groupValue: temaSaatIni,
+                          onChanged: (String? value) => _pilihTema(context, value),
+                          child: Column(
+                            children: <Widget>[
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: const Radio<String>(value: _temaDefault),
+                                title: const Text('Default'),
+                                onTap: () {
+                                  _pilihTema(context, _temaDefault);
+                                },
+                              ),
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: const Radio<String>(value: _temaGta6),
+                                title: const Text('GTA6'),
+                                onTap: () {
+                                  _pilihTema(context, _temaGta6);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

@@ -62,4 +62,34 @@ void main() {
 
     expect(tester.widget<TextField>(find.byType(TextField).first).controller!.text, '');
   });
+
+  testWidgets('Tema GTA6 bisa dipilih di About dan tersimpan', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    await AppData.instance.load();
+
+    await tester.pumpWidget(const PrichieoApp());
+    expect(AppData.instance.tema.value, 'Default');
+
+    await tester.tap(find.text('About'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Default'), findsOneWidget);
+    expect(find.text('GTA6'), findsOneWidget);
+
+    await tester.ensureVisible(find.text('GTA6'));
+    await tester.pump();
+    await tester.tap(find.text('GTA6'));
+    await tester.pumpAndSettle();
+
+    expect(AppData.instance.tema.value, 'GTA6');
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('prichieo.theme.v1'), 'GTA6');
+
+    await tester.ensureVisible(find.text('Default'));
+    await tester.pump();
+    await tester.tap(find.text('Default'));
+    await tester.pumpAndSettle();
+
+    expect(AppData.instance.tema.value, 'Default');
+  });
 }
