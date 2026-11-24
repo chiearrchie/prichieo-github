@@ -25,7 +25,7 @@ Arah gradien kira-kira 120 derajat. Di Flutter, `begin: Alignment(-0.866, -0.5)`
 
 ### Kontras
 
-App bar memakai gradien penuh tanpa lapisan hitam. Logo dan tulisan `PRICHIEO` tetap putih di sisi kiri yang berwarna `#1e0338`, kontras `18,66:1`. Judul halaman juga tetap putih. Karena ujung kanan berwarna `#ffb800` dan kontras putihnya hanya `1,73:1`, judul diberi latar `#1e0338` dengan alpha `0,45` hanya di belakang teks. Warna di belakang teks menjadi sekitar `#9a6719`, kontras putih `4,85:1`, jadi tetap lolos WCAG AA tanpa menggelapkan seluruh app bar.
+App bar memakai gradien penuh tanpa lapisan hitam. Logo dan tulisan `PRICHIEO` tetap putih di sisi kiri yang berwarna `#1e0338`, kontras `18,66:1`. Judul halaman memakai putih polos tanpa latar sesuai pilihan pemilik. Di ujung kanan yang berwarna `#ffb800`, kontras putih hanya `1,73:1`, jadi keterbacaan judul di area kuning menurun. Ini adalah penyimpangan yang disetujui pemilik.
 
 Bottom navigation bar tidak ikut bergradien. Tab aktif memakai aksen ungu `#6a0572`, tab lain abu-abu, seperti pola navigasi bawaan.
 

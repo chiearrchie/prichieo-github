@@ -543,28 +543,14 @@ class PrichieoScaffold extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: gaya.gradasi == null
-                    ? Text(
-                        title,
-                        textAlign: TextAlign.right,
-                        maxLines: 2,
-                        style: const TextStyle(fontSize: 15),
-                      )
-                    : DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: _warnaUnguTua.withValues(alpha: 0.45),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          child: Text(
-                            title,
-                            textAlign: TextAlign.right,
-                            maxLines: 2,
-                            style: const TextStyle(fontSize: 15, color: Colors.white),
-                          ),
-                        ),
-                      ),
+                child: Text(
+                  title,
+                  textAlign: TextAlign.right,
+                  maxLines: 2,
+                  style: gaya.gradasi == null
+                      ? const TextStyle(fontSize: 15)
+                      : const TextStyle(fontSize: 15, color: Colors.white),
+                ),
               ),
             ],
           ),
