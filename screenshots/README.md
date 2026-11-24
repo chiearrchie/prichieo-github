@@ -1,6 +1,6 @@
 # Screenshot aplikasi
 
-Lima tampilan utama PRICHIEO, diambil dari build Flutter yang berjalan di BlueStacks. Format PNG, ukuran 720x1280 portrait.
+Lima tampilan utama PRICHIEO versi 1.2.0, diambil dari build web Flutter dengan tema GTA6 aktif. Format PNG, ukuran 720x1280 portrait.
 
 | File | Tampilan |
 |---|---|
