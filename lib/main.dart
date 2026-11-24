@@ -32,7 +32,6 @@ const Color _warnaMagenta = Color(0xFFE1007A);
 const Color _warnaMerahMuda = Color(0xFFF74C52);
 const Color _warnaOranye = Color(0xFFFF8C1A);
 const Color _warnaKuning = Color(0xFFFFB800);
-const Color _warnaTeksNavigasi = Color(0xFF0A0014);
 
 const List<Color> _warnaGradasi = <Color>[
   _warnaUnguTua,
@@ -47,20 +46,6 @@ const LinearGradient _gradasiPrichieo = LinearGradient(
   begin: Alignment(-0.866, -0.5),
   end: Alignment(0.866, 0.5),
   colors: _warnaGradasi,
-  stops: _posisiGradasi,
-);
-
-const LinearGradient _lapisanKontras = LinearGradient(
-  begin: Alignment(-0.866, -0.5),
-  end: Alignment(0.866, 0.5),
-  colors: <Color>[
-    Color(0x00000000),
-    Color(0x00000000),
-    Color(0x0D000000),
-    Color(0x4D000000),
-    Color(0x61000000),
-    Color(0x66000000),
-  ],
   stops: _posisiGradasi,
 );
 
@@ -144,24 +129,18 @@ Widget _tombolUtama(
       gradient: _gradasiPrichieo,
       borderRadius: BorderRadius.circular(8),
     ),
-    child: DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: _lapisanKontras,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        disabledBackgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          disabledBackgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-        ),
+      onPressed: onPressed,
+      child: Text(
+        label,
+        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
       ),
     ),
   );
@@ -470,109 +449,36 @@ class _MainDashboardState extends State<MainDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(child: _pages[_currentIndex]),
-      bottomNavigationBar: _gaya(context).gradasi == null
-          ? BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              currentIndex: _currentIndex,
-              selectedItemColor: _aksen(context, Colors.redAccent),
-              unselectedItemColor: Colors.grey[600],
-              selectedFontSize: 10,
-              unselectedFontSize: 10,
-              onTap: (index) => setState(() => _currentIndex = index),
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.calculate),
-                  label: 'HPP',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.account_balance_wallet),
-                  label: 'Pemisah Kas',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.trending_up),
-                  label: 'Target',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.history),
-                  label: 'Riwayat',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.info_outline),
-                  label: 'About',
-                ),
-              ],
-            )
-          : _navigasiGta6(),
-    );
-  }
-
-  Widget _navigasiGta6() {
-    const List<IconData> ikon = <IconData>[
-      Icons.calculate,
-      Icons.account_balance_wallet,
-      Icons.trending_up,
-      Icons.history,
-      Icons.info_outline,
-    ];
-    const List<String> label = <String>[
-      'HPP',
-      'Pemisah Kas',
-      'Target',
-      'Riwayat',
-      'About',
-    ];
-    const List<Color> warna = <Color>[
-      Colors.white,
-      Colors.white,
-      _warnaTeksNavigasi,
-      _warnaTeksNavigasi,
-      _warnaTeksNavigasi,
-    ];
-
-    return DecoratedBox(
-      decoration: const BoxDecoration(gradient: _gradasiPrichieo),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 64,
-          child: Row(
-            children: <Widget>[
-              for (var i = 0; i < label.length; i++)
-                Expanded(
-                  child: Semantics(
-                    button: true,
-                    selected: i == _currentIndex,
-                    label: '${label[i]} Tab ${i + 1} of ${label.length}',
-                    child: ExcludeSemantics(
-                      child: InkWell(
-                        onTap: () => setState(() => _currentIndex = i),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(ikon[i], color: warna[i], size: 24),
-                            const SizedBox(height: 4),
-                            Text(
-                              label[i],
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: warna[i],
-                                fontSize: 10,
-                                fontWeight: i == _currentIndex
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex,
+        selectedItemColor: _aksen(context, Colors.redAccent),
+        unselectedItemColor: Colors.grey[600],
+        selectedFontSize: 10,
+        unselectedFontSize: 10,
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calculate),
+            label: 'HPP',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance_wallet),
+            label: 'Pemisah Kas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.trending_up),
+            label: 'Target',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'Riwayat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info_outline),
+            label: 'About',
+          ),
+        ],
       ),
     );
   }
