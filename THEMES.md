@@ -25,7 +25,9 @@ Arah gradien kira-kira 120 derajat. Di Flutter, `begin: Alignment(-0.866, -0.5)`
 
 ### Kontras
 
-Teks putih tidak diletakkan langsung di atas stop kuning karena kontrasnya hanya `1,73:1`. Lapisan hitamnya bertahap, bukan seragam: `alpha 0` pada ungu tua dan ungu, lalu naik sampai `alpha 0,40` pada kuning. Kontras teks putih minimum menjadi `4,58:1`, lolos WCAG AA untuk teks biasa.
+App bar memakai gradien penuh tanpa lapisan hitam. Logo dan tulisan `PRICHIEO` tetap putih di sisi kiri yang berwarna `#1e0338`, kontras `18,66:1`. Judul halaman di sisi kanan memakai `#1e0338` di atas kuning `#ffb800`, kontras `10,76:1`. Kedua pasangan ini lolos WCAG AA untuk teks biasa.
+
+Teks putih pada tombol tetap memakai lapisan hitam bertahap, bukan seragam: `alpha 0` pada ungu tua dan ungu, lalu naik sampai `alpha 0,40` pada kuning. Kontras teks putih minimum menjadi `4,58:1`, juga lolos WCAG AA untuk teks biasa.
 
 Aksen teks di atas permukaan terang memakai `#6a0572`, kontras `10,26:1` terhadap `#f5f5f5`.
 
@@ -36,7 +38,7 @@ Oranye pada kartu modal dan hijau pada kartu laba tetap dipakai sebagai penanda 
 Definisi warna, gradien, lapisan kontras, dan helper tombol ada di bagian atas `usr/lib/main.dart`:
 
 - `_warnaGradasi`, `_posisiGradasi`, `_gradasiPrichieo`
-- `_lapisanKontras`, `_lapisanGelap`
+- `_lapisanKontras`, `_lapisanGradien`
 - `_tombolUtama`
 - `_GayaTema` dan `_gayaGta6`
 

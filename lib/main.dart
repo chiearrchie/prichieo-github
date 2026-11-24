@@ -111,13 +111,10 @@ Color _aksen(BuildContext context, Color warnaDefault) {
   return gaya.gradasi == null ? warnaDefault : gaya.aksen;
 }
 
-Widget _lapisanGelap({required Widget child}) {
+Widget _lapisanGradien({required Widget child}) {
   return DecoratedBox(
     decoration: const BoxDecoration(gradient: _gradasiPrichieo),
-    child: DecoratedBox(
-      decoration: const BoxDecoration(gradient: _lapisanKontras),
-      child: child,
-    ),
+    child: child,
   );
 }
 
@@ -527,7 +524,7 @@ class PrichieoScaffold extends StatelessWidget {
         titleSpacing: 0,
         backgroundColor: gaya.gradasi == null ? null : Colors.transparent,
         surfaceTintColor: gaya.gradasi == null ? null : Colors.transparent,
-        flexibleSpace: gaya.gradasi == null ? null : _lapisanGelap(child: const SizedBox.expand()),
+        flexibleSpace: gaya.gradasi == null ? null : _lapisanGradien(child: const SizedBox.expand()),
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
@@ -570,7 +567,9 @@ class PrichieoScaffold extends StatelessWidget {
                   title,
                   textAlign: TextAlign.right,
                   maxLines: 2,
-                  style: const TextStyle(fontSize: 15),
+                  style: gaya.gradasi == null
+                      ? const TextStyle(fontSize: 15)
+                      : const TextStyle(fontSize: 15, color: _warnaUnguTua),
                 ),
               ),
             ],

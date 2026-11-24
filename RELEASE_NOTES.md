@@ -5,7 +5,7 @@
 - Pilihan tema di tab About: **Default** mempertahankan merah putih seperti semula, **GTA6** memakai gradien ungu, magenta, merah, oranye, dan kuning.
 - Preferensi tema tersimpan di perangkat dan tetap mengikuti mode terang atau gelap sistem.
 - Kalimat pembuka pada tab HPP dihapus supaya kolom input lebih ringkas.
-- Teks di atas gradien memakai lapisan kontras bertahap supaya tetap terbaca.
+- App bar GTA6 memakai gradien penuh. Judul halaman berwarna ungu tua supaya tetap terbaca di sisi kuning, sedangkan tombol memakai lapisan kontras bertahap.
 - Versi: `1.2.0`, version code `4`.
 
 ## v1.1.1
