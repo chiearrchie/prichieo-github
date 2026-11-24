@@ -27,7 +27,7 @@ PRICHIEO tidak memakai iklan, pelacak, analitik, atau layanan pihak ketiga lainn
 
 ## Menghapus data
 
-Kamu bisa menghapus seluruh riwayat lewat tombol **HAPUS RIWAYAT** di tab Riwayat. Tombol **KOSONGKAN INPUT** di tab About menghapus nama produk dan semua angka yang tersimpan, serta mengembalikan persentase modal ke 60. Satuan produk dan riwayat tidak berubah saat tombol ini dipakai. Semua data akan hilang saat aplikasi dihapus dari perangkat.
+Kamu bisa menghapus seluruh riwayat lewat tombol **HAPUS RIWAYAT** di tab Riwayat. Tombol **KOSONGKAN INPUT** di tab HPP menghapus nama produk dan semua angka yang tersimpan, serta mengembalikan persentase modal ke 60. Satuan produk dan riwayat tidak berubah saat tombol ini dipakai. Semua data akan hilang saat aplikasi dihapus dari perangkat.
 
 ## Retensi
 

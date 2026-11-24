@@ -396,6 +396,7 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
   double _hpp = 0;
   String? _persenInfo;
   bool _updatingUnit = false;
+  bool _resetting = false;
 
   @override
   void initState() {
@@ -470,7 +471,48 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
     _recalculate();
   }
 
+  Future<void> _resetInputs() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext ctx) => AlertDialog(
+        title: const Text('Kosongkan input?'),
+        content: const Text(
+          'Nama produk dan semua angka yang tersimpan akan dihapus. Persentase modal kembali ke 60. Riwayat dan satuan tidak berubah.',
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Kosongkan'),
+          ),
+        ],
+      ),
+    );
+    if (confirm != true || !mounted) return;
+
+    final ok = await AppData.instance.resetInputs();
+    if (!mounted) return;
+
+    _resetting = true;
+    _namaCtrl.clear();
+    _bahanCtrl.clear();
+    _tenagaCtrl.clear();
+    _overheadCtrl.clear();
+    _kemasanCtrl.clear();
+    _hargaCtrl.clear();
+    _platformCtrl.text = '0';
+    _qtyCtrl.text = '1';
+    _recalculate();
+    _resetting = false;
+
+    beriTahu(context, ok ? 'Input berhasil dikosongkan.' : 'Input gagal dikosongkan.');
+  }
+
   void _saveInputs() {
+    if (_resetting) return;
     final data = AppData.instance;
     data.setInput(_inNama, _namaCtrl.text);
     data.setInput(_inBahan, _bahanCtrl.text);
@@ -584,6 +626,12 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
             _field('Harga Jual per Unit (Rp)', _hargaCtrl),
             _field('Potongan Platform (%)', _platformCtrl),
             _field('Jumlah Produk Dihasilkan', _qtyCtrl, decimal: false),
+            OutlinedButton.icon(
+              onPressed: _resetInputs,
+              icon: const Icon(Icons.restart_alt),
+              label: const Text('KOSONGKAN INPUT'),
+            ),
+            const SizedBox(height: 12),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
@@ -1123,32 +1171,6 @@ class AboutScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _resetInputs(BuildContext context) async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext ctx) => AlertDialog(
-        title: const Text('Kosongkan input?'),
-        content: const Text(
-          'Nama produk dan semua angka yang tersimpan akan dihapus. Persentase modal kembali ke 60. Riwayat dan satuan tidak berubah.',
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Batal'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Kosongkan'),
-          ),
-        ],
-      ),
-    );
-    if (confirm != true || !context.mounted) return;
-    final ok = await AppData.instance.resetInputs();
-    if (!context.mounted) return;
-    beriTahu(context, ok ? 'Input berhasil dikosongkan.' : 'Input gagal dikosongkan.');
-  }
-
   @override
   Widget build(BuildContext context) {
     return PrichieoScaffold(
@@ -1213,12 +1235,6 @@ class AboutScreen extends StatelessWidget {
               onPressed: () => _bukaInstagram(context),
               icon: const Icon(Icons.open_in_new),
               label: const Text('Buka Instagram @chiearrchie'),
-            ),
-            const SizedBox(height: 12),
-            OutlinedButton.icon(
-              onPressed: () => _resetInputs(context),
-              icon: const Icon(Icons.restart_alt),
-              label: const Text('KOSONGKAN INPUT'),
             ),
           ],
         ),

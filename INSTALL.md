@@ -3,7 +3,7 @@
 ## Cara paling mudah: link unduh langsung
 
 1. Buka link ini di browser HP:
-   `https://raw.githubusercontent.com/chiearrchie/prichieo-github/main/apk/prichieo-v1.1.0-release.apk`
+   `https://raw.githubusercontent.com/chiearrchie/prichieo-github/main/apk/prichieo-v1.1.1-release.apk`
 2. Tunggu proses unduh selesai.
 3. Buka file APK tersebut dari panel unduhan.
 4. Android akan meminta izin memasang aplikasi dari sumber tidak dikenal. Pilih **Izinkan** atau **Allow**.

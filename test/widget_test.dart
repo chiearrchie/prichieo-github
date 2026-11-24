@@ -48,7 +48,7 @@ void main() {
     await tester.pump();
     expect(tester.widget<TextField>(find.byType(TextField).first).controller!.text, '500000');
 
-    await tester.tap(find.text('About'));
+    await tester.tap(find.text('HPP'));
     await tester.pump();
     await tester.ensureVisible(find.text('KOSONGKAN INPUT'));
     await tester.pump();
@@ -60,8 +60,6 @@ void main() {
     expect(AppData.instance.getInput('hpp.nama'), '');
     expect(AppData.instance.modalPercent.value, '60');
 
-    await tester.tap(find.text('HPP'));
-    await tester.pump();
     expect(tester.widget<TextField>(find.byType(TextField).first).controller!.text, '');
   });
 }

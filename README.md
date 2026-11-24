@@ -6,12 +6,12 @@ PRICHIEO adalah aplikasi Flutter untuk menghitung HPP, memisahkan uang modal dan
 
 ## Unduh aplikasi
 
-Unduh file APK dari folder `apk/prichieo-v1.1.0-release.apk`, lalu ikuti panduan di [INSTALL.md](INSTALL.md).
+Unduh file APK dari folder `apk/prichieo-v1.1.1-release.apk`, lalu ikuti panduan di [INSTALL.md](INSTALL.md).
 
 Link unduh langsung:
 
 ```
-https://raw.githubusercontent.com/chiearrchie/prichieo-github/main/apk/prichieo-v1.1.0-release.apk
+https://raw.githubusercontent.com/chiearrchie/prichieo-github/main/apk/prichieo-v1.1.1-release.apk
 ```
 
 ## Tampilan aplikasi
@@ -36,7 +36,7 @@ https://raw.githubusercontent.com/chiearrchie/prichieo-github/main/apk/prichieo-
 - Pemisah Kas membagi omset menjadi uang modal dan laba kotor.
 - Target Penjualan menghitung jumlah unit yang harus terjual dari target omset.
 - Riwayat tersimpan di perangkat, maksimal 50 entri, dan bisa dihapus.
-- Input hitungan tersimpan otomatis di perangkat dan bisa dikosongkan lewat tombol KOSONGKAN INPUT di tab About.
+- Input hitungan tersimpan otomatis di perangkat dan bisa dikosongkan lewat tombol KOSONGKAN INPUT di tab HPP.
 - Tab About berisi identitas aplikasi dan tautan Instagram pembuat.
 
 ## Data dan privasi
@@ -62,6 +62,6 @@ Build rilis memerlukan `android/key.properties` dan file keystore. Keduanya seng
 
 ## Versi
 
-`1.1.0+2`
+`1.1.1+3`
 
 Catatan rilis ada di [RELEASE_NOTES.md](RELEASE_NOTES.md).
