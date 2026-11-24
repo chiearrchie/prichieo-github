@@ -8,6 +8,18 @@ import 'package:url_launcher/url_launcher.dart';
 const String _historyKey = 'prichieo.history.v1';
 const String _unitKey = 'prichieo.unit.v1';
 const String _percentKey = 'prichieo.modalPercent.v1';
+const String _inputsKey = 'prichieo.inputs.v1';
+const String _inNama = 'hpp.nama';
+const String _inBahan = 'hpp.bahan';
+const String _inTenaga = 'hpp.tenaga';
+const String _inOverhead = 'hpp.overhead';
+const String _inKemasan = 'hpp.kemasan';
+const String _inHarga = 'hpp.harga';
+const String _inPlatform = 'hpp.platform';
+const String _inQty = 'hpp.qty';
+const String _inOmset = 'kas.omset';
+const String _inTarget = 'target.omset';
+const String _inTargetHarga = 'target.harga';
 const int _maxHistory = 50;
 const String _instagramUrl = 'https://www.instagram.com/chiearrchie';
 
@@ -55,6 +67,7 @@ class AppData {
   static final AppData instance = AppData._();
 
   SharedPreferences? _prefs;
+  Map<String, String> _inputs = <String, String>{};
   final ValueNotifier<String> unit = ValueNotifier<String>('unit');
   final ValueNotifier<String> modalPercent = ValueNotifier<String>('60');
   final ValueNotifier<List<HistoryEntry>> history =
@@ -66,6 +79,13 @@ class AppData {
       _prefs = await SharedPreferences.getInstance();
       unit.value = _prefs!.getString(_unitKey) ?? 'unit';
       modalPercent.value = _prefs!.getString(_percentKey) ?? '60';
+      final rawInputs = _prefs!.getString(_inputsKey);
+      if (rawInputs != null && rawInputs.isNotEmpty) {
+        final decoded = jsonDecode(rawInputs) as Map<String, dynamic>;
+        _inputs = decoded.map(
+          (String key, dynamic value) => MapEntry<String, String>(key, value.toString()),
+        );
+      }
       final raw = _prefs!.getStringList(_historyKey) ?? <String>[];
       history.value = raw
           .map((item) => HistoryEntry.fromJson(jsonDecode(item) as Map<String, dynamic>))
@@ -88,6 +108,21 @@ class AppData {
     if (modalPercent.value == cleaned) return true;
     modalPercent.value = cleaned;
     return _write(() => _prefs!.setString(_percentKey, cleaned));
+  }
+
+  String getInput(String key) => _inputs[key] ?? '';
+
+  Future<bool> setInput(String key, String value) async {
+    if (_inputs[key] == value) return true;
+    _inputs[key] = value;
+    return _write(() => _prefs!.setString(_inputsKey, jsonEncode(_inputs)));
+  }
+
+  Future<bool> resetInputs() async {
+    _inputs = <String, String>{};
+    final savedInputs = await _write(() => _prefs!.remove(_inputsKey));
+    final savedPercent = await setModalPercent('60');
+    return savedInputs && savedPercent;
   }
 
   Future<bool> addHistory(HistoryEntry entry) async {
@@ -179,6 +214,11 @@ String ribuan(int value) {
   return value
       .toString()
       .replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (match) => '${match[1]}.');
+}
+
+String savedOr(String key, String fallback) {
+  final value = AppData.instance.getInput(key);
+  return value.isEmpty ? fallback : value;
 }
 
 double angka(TextEditingController controller, [double fallback = 0]) {
@@ -335,16 +375,23 @@ class HppCalculatorScreen extends StatefulWidget {
 }
 
 class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
-  final TextEditingController _namaCtrl = TextEditingController();
+  final TextEditingController _namaCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inNama));
   final TextEditingController _satuanCtrl =
       TextEditingController(text: AppData.instance.unit.value);
-  final TextEditingController _bahanCtrl = TextEditingController();
-  final TextEditingController _tenagaCtrl = TextEditingController();
-  final TextEditingController _overheadCtrl = TextEditingController();
-  final TextEditingController _kemasanCtrl = TextEditingController();
-  final TextEditingController _hargaCtrl = TextEditingController();
-  final TextEditingController _platformCtrl = TextEditingController(text: '0');
-  final TextEditingController _qtyCtrl = TextEditingController(text: '1');
+  final TextEditingController _bahanCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inBahan));
+  final TextEditingController _tenagaCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inTenaga));
+  final TextEditingController _overheadCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inOverhead));
+  final TextEditingController _kemasanCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inKemasan));
+  final TextEditingController _hargaCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inHarga));
+  final TextEditingController _platformCtrl =
+      TextEditingController(text: savedOr(_inPlatform, '0'));
+  final TextEditingController _qtyCtrl = TextEditingController(text: savedOr(_inQty, '1'));
 
   double _hpp = 0;
   String? _persenInfo;
@@ -360,6 +407,14 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
     _hargaCtrl.addListener(_recalculate);
     _platformCtrl.addListener(_recalculate);
     _qtyCtrl.addListener(_recalculate);
+    _namaCtrl.addListener(_saveInputs);
+    _bahanCtrl.addListener(_saveInputs);
+    _tenagaCtrl.addListener(_saveInputs);
+    _overheadCtrl.addListener(_saveInputs);
+    _kemasanCtrl.addListener(_saveInputs);
+    _hargaCtrl.addListener(_saveInputs);
+    _platformCtrl.addListener(_saveInputs);
+    _qtyCtrl.addListener(_saveInputs);
     _satuanCtrl.addListener(_onSatuanEdited);
     AppData.instance.unit.addListener(_onUnitChanged);
     _recalculate(notify: false);
@@ -374,6 +429,14 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
     _hargaCtrl.removeListener(_recalculate);
     _platformCtrl.removeListener(_recalculate);
     _qtyCtrl.removeListener(_recalculate);
+    _namaCtrl.removeListener(_saveInputs);
+    _bahanCtrl.removeListener(_saveInputs);
+    _tenagaCtrl.removeListener(_saveInputs);
+    _overheadCtrl.removeListener(_saveInputs);
+    _kemasanCtrl.removeListener(_saveInputs);
+    _hargaCtrl.removeListener(_saveInputs);
+    _platformCtrl.removeListener(_saveInputs);
+    _qtyCtrl.removeListener(_saveInputs);
     _satuanCtrl.removeListener(_onSatuanEdited);
     AppData.instance.unit.removeListener(_onUnitChanged);
     for (final controller in <TextEditingController>[
@@ -405,6 +468,18 @@ class _HppCalculatorScreenState extends State<HppCalculatorScreen> {
     _satuanCtrl.text = value;
     _updatingUnit = false;
     _recalculate();
+  }
+
+  void _saveInputs() {
+    final data = AppData.instance;
+    data.setInput(_inNama, _namaCtrl.text);
+    data.setInput(_inBahan, _bahanCtrl.text);
+    data.setInput(_inTenaga, _tenagaCtrl.text);
+    data.setInput(_inOverhead, _overheadCtrl.text);
+    data.setInput(_inKemasan, _kemasanCtrl.text);
+    data.setInput(_inHarga, _hargaCtrl.text);
+    data.setInput(_inPlatform, _platformCtrl.text);
+    data.setInput(_inQty, _qtyCtrl.text);
   }
 
   void _recalculate({bool notify = true}) {
@@ -574,7 +649,8 @@ class CashSplitterScreen extends StatefulWidget {
 }
 
 class _CashSplitterScreenState extends State<CashSplitterScreen> {
-  final TextEditingController _omsetCtrl = TextEditingController();
+  final TextEditingController _omsetCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inOmset));
   final TextEditingController _persenCtrl =
       TextEditingController(text: AppData.instance.modalPercent.value);
 
@@ -585,17 +661,23 @@ class _CashSplitterScreenState extends State<CashSplitterScreen> {
   @override
   void initState() {
     super.initState();
+    _omsetCtrl.addListener(_saveOmset);
     _persenCtrl.addListener(_onPercentEdited);
     AppData.instance.modalPercent.addListener(_onPercentChanged);
   }
 
   @override
   void dispose() {
+    _omsetCtrl.removeListener(_saveOmset);
     _persenCtrl.removeListener(_onPercentEdited);
     AppData.instance.modalPercent.removeListener(_onPercentChanged);
     _omsetCtrl.dispose();
     _persenCtrl.dispose();
     super.dispose();
+  }
+
+  void _saveOmset() {
+    AppData.instance.setInput(_inOmset, _omsetCtrl.text);
   }
 
   void _onPercentEdited() {
@@ -747,22 +829,34 @@ class TargetOmsetScreen extends StatefulWidget {
 }
 
 class _TargetOmsetScreenState extends State<TargetOmsetScreen> {
-  final TextEditingController _targetCtrl = TextEditingController();
-  final TextEditingController _hargaCtrl = TextEditingController();
+  final TextEditingController _targetCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inTarget));
+  final TextEditingController _hargaCtrl =
+      TextEditingController(text: AppData.instance.getInput(_inTargetHarga));
   int? _lastCount;
 
   @override
   void initState() {
     super.initState();
+    _targetCtrl.addListener(_saveInputs);
+    _hargaCtrl.addListener(_saveInputs);
     AppData.instance.unit.addListener(_onUnitChanged);
   }
 
   @override
   void dispose() {
+    _targetCtrl.removeListener(_saveInputs);
+    _hargaCtrl.removeListener(_saveInputs);
     AppData.instance.unit.removeListener(_onUnitChanged);
     _targetCtrl.dispose();
     _hargaCtrl.dispose();
     super.dispose();
+  }
+
+  void _saveInputs() {
+    final data = AppData.instance;
+    data.setInput(_inTarget, _targetCtrl.text);
+    data.setInput(_inTargetHarga, _hargaCtrl.text);
   }
 
   void _onUnitChanged() {
@@ -1029,6 +1123,32 @@ class AboutScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _resetInputs(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext ctx) => AlertDialog(
+        title: const Text('Kosongkan input?'),
+        content: const Text(
+          'Nama produk dan semua angka yang tersimpan akan dihapus. Persentase modal kembali ke 60. Riwayat dan satuan tidak berubah.',
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Kosongkan'),
+          ),
+        ],
+      ),
+    );
+    if (confirm != true || !context.mounted) return;
+    final ok = await AppData.instance.resetInputs();
+    if (!context.mounted) return;
+    beriTahu(context, ok ? 'Input berhasil dikosongkan.' : 'Input gagal dikosongkan.');
+  }
+
   @override
   Widget build(BuildContext context) {
     return PrichieoScaffold(
@@ -1093,6 +1213,12 @@ class AboutScreen extends StatelessWidget {
               onPressed: () => _bukaInstagram(context),
               icon: const Icon(Icons.open_in_new),
               label: const Text('Buka Instagram @chiearrchie'),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: () => _resetInputs(context),
+              icon: const Icon(Icons.restart_alt),
+              label: const Text('KOSONGKAN INPUT'),
             ),
           ],
         ),

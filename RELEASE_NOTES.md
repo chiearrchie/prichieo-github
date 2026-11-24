@@ -1,5 +1,12 @@
 # Catatan rilis
 
+## v1.1.0
+
+- Input hitungan tersimpan otomatis di perangkat: nama produk, biaya, harga jual, potongan platform, jumlah produk, omset, dan target penjualan.
+- Tombol **KOSONGKAN INPUT** di tab About untuk menghapus input tersimpan dan mengembalikan persentase modal ke 60.
+- Riwayat dan satuan tidak berubah saat input dikosongkan.
+- Versi: `1.1.0`, version code `2`.
+
 ## v1.0.0
 
 Rilis pertama PRICHIEO.

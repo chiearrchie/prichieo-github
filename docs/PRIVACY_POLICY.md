@@ -6,11 +6,12 @@ PRICHIEO adalah aplikasi kalkulator bisnis untuk menghitung HPP, memisahkan uang
 
 ## Data yang disimpan aplikasi
 
-Aplikasi menyimpan tiga jenis data di perangkat kamu:
+Aplikasi menyimpan beberapa jenis data di perangkat kamu:
 
 - Riwayat hitungan HPP, pemisah kas, dan target penjualan, maksimal 50 entri terakhir.
 - Satuan produk yang kamu atur, misalnya porsi, biji, box, atau unit.
 - Persentase modal yang kamu pakai di Pemisah Kas.
+- Input hitungan yang kamu ketik, yaitu nama produk, biaya bahan, tenaga kerja, overhead, kemasan, harga jual, potongan platform, jumlah produk, omset, dan target penjualan. Input ini disimpan supaya tidak perlu diketik ulang saat aplikasi dibuka kembali.
 
 Data tersebut disimpan secara lokal di perangkat dengan `SharedPreferences`. Data tidak dikirim ke server, tidak diunggah, dan tidak dibagikan kepada pihak lain.
 
@@ -26,7 +27,7 @@ PRICHIEO tidak memakai iklan, pelacak, analitik, atau layanan pihak ketiga lainn
 
 ## Menghapus data
 
-Kamu bisa menghapus seluruh riwayat lewat tombol **HAPUS RIWAYAT** di tab Riwayat. Satuan produk dan persentase modal akan kembali ke nilai awal saat aplikasi dihapus dari perangkat.
+Kamu bisa menghapus seluruh riwayat lewat tombol **HAPUS RIWAYAT** di tab Riwayat. Tombol **KOSONGKAN INPUT** di tab About menghapus nama produk dan semua angka yang tersimpan, serta mengembalikan persentase modal ke 60. Satuan produk dan riwayat tidak berubah saat tombol ini dipakai. Semua data akan hilang saat aplikasi dihapus dari perangkat.
 
 ## Retensi
 

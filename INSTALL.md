@@ -1,15 +1,13 @@
 # Cara memasang PRICHIEO di Android
 
-## Cara paling mudah: dari tab Releases
+## Cara paling mudah: link unduh langsung
 
-1. Buka repository GitHub ini di browser.
-2. Klik tab **Releases** di sebelah kanan atas daftar file.
-3. Klik rilis terbaru, misalnya **PRICHIEO v1.0.0**.
-4. Di bagian **Assets**, klik `prichieo-v1.0.0-release.apk`.
-5. Tunggu proses unduh selesai.
-6. Buka file APK tersebut dari panel unduhan.
-7. Android akan meminta izin memasang aplikasi dari sumber tidak dikenal. Pilih **Izinkan** atau **Allow**.
-8. Klik **Install**, lalu **Open** setelah selesai.
+1. Buka link ini di browser HP:
+   `https://raw.githubusercontent.com/chiearrchie/prichieo-github/main/apk/prichieo-v1.1.0-release.apk`
+2. Tunggu proses unduh selesai.
+3. Buka file APK tersebut dari panel unduhan.
+4. Android akan meminta izin memasang aplikasi dari sumber tidak dikenal. Pilih **Izinkan** atau **Allow**.
+5. Klik **Install**, lalu **Open** setelah selesai.
 
 Kalau memakai BlueStacks, tarik file APK ke jendela BlueStacks atau klik **Install apk** lalu pilih file tersebut.
 
